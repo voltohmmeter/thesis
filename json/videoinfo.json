@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Number Sign language",
+    "time": "45 seconds",
+    "thumbnail": "assets/icons/play.png",
+    "videoUrl": "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"
+  },
+  {
+    "title": "Letters Sign Language",
+    "time": "55 seconds",
+    "thumbnail": "assets/icons/play.png",
+    "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+  },
+  {
+    "title": "Sign Language Greetings",
+    "time": "60 seconds",
+    "thumbnail": "assets/icons/play.png",
+    "videoUrl": "https://youtu.be/inQrcFytHJ0"
+  },
+  {
+    "title": "Conversational SignLanguge",
+    "time": "120 seconds",
+    "thumbnail": "assets/icons/play.png",
+    "videoUrl": "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"
+  }
+
+]

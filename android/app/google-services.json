@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "946049116093",
+    "firebase_url": "https://salinsalita-390a5-default-rtdb.firebaseio.com",
+    "project_id": "salinsalita-390a5",
+    "storage_bucket": "salinsalita-390a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946049116093:android:00d38d6aab96aae81d14d4",
+        "android_client_info": {
+          "package_name": "com.example.salinsalita"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBh5iFJz5A_WOmpOPBdniQR0m2CkXUA3DU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
