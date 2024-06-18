@@ -63,7 +63,7 @@ class _AddQuizState extends State<AddQuiz> {
   final List<String> quizitems = [
     'The Basics',
     'Greetings',
-    'Number',
+    'Numbers',
     'Letters'
   ];
 

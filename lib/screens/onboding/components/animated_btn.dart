@@ -35,7 +35,6 @@ class AnimatedBtn extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(CupertinoIcons.arrow_right),
                   SizedBox(width: 8),
                   Text(
                     "Start the course",

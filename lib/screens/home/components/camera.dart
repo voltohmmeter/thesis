@@ -1,191 +1,109 @@
-// import 'dart:io';
-// import 'dart:typed_data';
-// import 'dart:ui';
-// import 'package:flutter/material.dart';
-// import 'package:camera/camera.dart';
-// import 'package:flutter_vision/flutter_vision.dart';
-// import 'package:salinsalita/main.dart';
+import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import 'package:tflite_v2/tflite_v2.dart';
 
-// class YoloVideo extends StatefulWidget {
-//   final FlutterVision vision;
-//   const YoloVideo({
-//     super.key,
-//     required this.vision,
-//   });
+class SignLanguageRecognition extends StatefulWidget {
+  @override
+  _SignLanguageRecognitionState createState() =>
+      _SignLanguageRecognitionState();
+}
 
-//   @override
-//   State<YoloVideo> createState() => _YoloVideoState();
-// }
+class _SignLanguageRecognitionState extends State<SignLanguageRecognition> {
+  CameraController? cameraController;
+  CameraImage? cameraImage;
+  String output = '';
 
-// class _YoloVideoState extends State<YoloVideo> {
-//   late CameraController controller;
-//   late List<Map<String, dynamic>> yoloResults;
-//   CameraImage? cameraImage;
-//   bool isLoaded = false;
-//   bool isDetecting = false;
+  @override
+  void initState() {
+    super.initState();
+    loadModel();
+    initializeCamera();
+  }
 
-//   @override
-//   void initState() {
-//     super.initState();
+  loadModel() async {
+    await Tflite.loadModel(
+      model: 'assets/model_unquant.tflite',
+      labels: 'assets/labels.txt',
+    );
+  }
 
-//     init();
-//   }
+  initializeCamera() async {
+    final cameras = await availableCameras();
+    final backCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.back);
 
-//   init() async {
-//     cameras = await availableCameras();
-//     controller = CameraController(cameras[0], ResolutionPreset.medium);
-//     controller.initialize().then((value) {
-//       loadYoloModel().then((value) {
-//         setState(() {
-//           isLoaded = true;
-//           isDetecting = false;
-//           yoloResults = [];
-//         });
-//       });
-//     });
-//   }
+    cameraController = CameraController(
+      backCamera,
+      ResolutionPreset.medium,
+      enableAudio: false,
+    );
 
-//   @override
-//   void dispose() async {
-//     super.dispose();
-//     controller.dispose();
-//   }
+    cameraController?.initialize().then((_) {
+      if (!mounted) return;
+      setState(() {
+        cameraController?.startImageStream((image) {
+          setState(() {
+            cameraImage = image;
+            runModelOnFrame();
+          });
+        });
+      });
+    });
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final Size size = MediaQuery.of(context).size;
-//     if (!isLoaded) {
-//       return const Scaffold(
-//         body: Center(
-//           child: Text("Model not loaded, waiting for it"),
-//         ),
-//       );
-//     }
-//     return Stack(
-//       fit: StackFit.expand,
-//       children: [
-//         AspectRatio(
-//           aspectRatio: controller.value.aspectRatio,
-//           child: CameraPreview(
-//             controller,
-//           ),
-//         ),
-//         ...displayBoxesAroundRecognizedObjects(size),
-//         Positioned(
-//           bottom: 75,
-//           width: MediaQuery.of(context).size.width,
-//           child: Container(
-//             height: 80,
-//             width: 80,
-//             decoration: BoxDecoration(
-//               shape: BoxShape.circle,
-//               border: Border.all(
-//                   width: 5, color: Colors.white, style: BorderStyle.solid),
-//             ),
-//             child: isDetecting
-//                 ? IconButton(
-//                     onPressed: () async {
-//                       stopDetection();
-//                     },
-//                     icon: const Icon(
-//                       Icons.stop,
-//                       color: Colors.red,
-//                     ),
-//                     iconSize: 50,
-//                   )
-//                 : IconButton(
-//                     onPressed: () async {
-//                       await startDetection();
-//                     },
-//                     icon: const Icon(
-//                       Icons.play_arrow,
-//                       color: Colors.white,
-//                     ),
-//                     iconSize: 50,
-//                   ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
+  runModelOnFrame() async {
+    if (cameraImage != null) {
+      var predictions = await Tflite.runModelOnFrame(
+        bytesList: cameraImage!.planes.map((plane) => plane.bytes).toList(),
+        imageHeight: cameraImage!.height,
+        imageWidth: cameraImage!.width,
+        imageMean: 127.5,
+        imageStd: 127.5,
+        rotation: 90,
+        numResults: 1,
+        threshold: 0.1,
+        asynch: true,
+      );
 
-//   Future<void> loadYoloModel() async {
-//     await widget.vision.loadYoloModel(
-//         labels: 'assets/labels.txt',
-//         modelPath: 'assets/model.tflite',
-//         modelVersion: "yolov8",
-//         numThreads: 2,
-//         useGpu: true);
-//     setState(() {
-//       isLoaded = true;
-//     });
-//   }
+      if (predictions != null && predictions.isNotEmpty) {
+        setState(() {
+          output = predictions.first['label'];
+        });
+      }
+    }
+  }
 
-//   Future<void> yoloOnFrame(CameraImage cameraImage) async {
-//     final result = await widget.vision.yoloOnFrame(
-//         bytesList: cameraImage.planes.map((plane) => plane.bytes).toList(),
-//         imageHeight: cameraImage.height,
-//         imageWidth: cameraImage.width,
-//         iouThreshold: 0.4,
-//         confThreshold: 0.4,
-//         classThreshold: 0.5);
-//     if (result.isNotEmpty) {
-//       setState(() {
-//         yoloResults = result;
-//       });
-//     }
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Sign Language Recognition')),
+      body: Column(
+        children: [
+          Expanded(
+            child: cameraController != null &&
+                    cameraController!.value.isInitialized
+                ? AspectRatio(
+                    aspectRatio: cameraController!.value.aspectRatio,
+                    child: CameraPreview(cameraController!),
+                  )
+                : Center(child: CircularProgressIndicator()),
+          ),
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              output,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-//   Future<void> startDetection() async {
-//     setState(() {
-//       isDetecting = true;
-//     });
-//     if (controller.value.isStreamingImages) {
-//       return;
-//     }
-//     await controller.startImageStream((image) async {
-//       if (isDetecting) {
-//         cameraImage = image;
-//         yoloOnFrame(image);
-//       }
-//     });
-//   }
-
-//   Future<void> stopDetection() async {
-//     setState(() {
-//       isDetecting = false;
-//       yoloResults.clear();
-//     });
-//   }
-
-//   List<Widget> displayBoxesAroundRecognizedObjects(Size screen) {
-//     if (yoloResults.isEmpty) return [];
-//     double factorX = screen.width / (cameraImage?.height ?? 1);
-//     double factorY = screen.height / (cameraImage?.width ?? 1);
-
-//     Color colorPick = const Color.fromARGB(255, 50, 233, 30);
-
-//     return yoloResults.map((result) {
-//       return Positioned(
-//         left: result["box"][0] * factorX,
-//         top: result["box"][1] * factorY,
-//         width: (result["box"][2] - result["box"][0]) * factorX,
-//         height: (result["box"][3] - result["box"][1]) * factorY,
-//         child: Container(
-//           decoration: BoxDecoration(
-//             borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-//             border: Border.all(color: Colors.pink, width: 2.0),
-//           ),
-//           child: Text(
-//             "${result['tag']} ${(result['box'][4] * 100).toStringAsFixed(0)}%",
-//             style: TextStyle(
-//               background: Paint()..color = colorPick,
-//               color: Colors.white,
-//               fontSize: 18.0,
-//             ),
-//           ),
-//         ),
-//       );
-//     }).toList();
-//   }
-// }
+  @override
+  void dispose() {
+    cameraController?.dispose();
+    Tflite.close();
+    super.dispose();
+  }
+}

@@ -87,9 +87,7 @@ class _EntryPointState extends State<EntryPoint>
                 scale: scalAnimation.value,
                 child: const ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(24)),
-                  child: SpeechCatch(
-                    username: '',
-                  ),
+                  child: SpeechCatch(username: ''),
                 ),
               ),
             ),
@@ -105,10 +103,8 @@ class _EntryPointState extends State<EntryPoint>
                     artboard,
                     stateMachineName: "State Machine");
                 isSideBarClosed = controller.findSMI("isOpen") as SMIBool;
-                // Now it's easy to understand
                 isSideBarClosed.value = true;
               },
-              // Let's fixed the scal animation
               press: () {
                 isSideBarClosed.value = !isSideBarClosed.value;
                 if (isSideMenuClosed) {

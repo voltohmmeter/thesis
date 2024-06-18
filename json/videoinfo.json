@@ -1,27 +1,34 @@
 [
   {
-    "title": "Number Sign language",
+    "title": "Number 1-100",
     "time": "45 seconds",
     "thumbnail": "assets/icons/play.png",
-    "videoUrl": "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"
+    "videoUrl": "https://ianjoshuabacud.publit.io/file/numbers.mp4"
   },
   {
-    "title": "Letters Sign Language",
+    "title": "Letters A-Z",
     "time": "55 seconds",
     "thumbnail": "assets/icons/play.png",
-    "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+    "videoUrl": "https://ianjoshuabacud.publit.io/file/letters-1.mp4"
   },
   {
-    "title": "Sign Language Greetings",
-    "time": "60 seconds",
+    "title": "Colors",
+    "time": "94 seconds",
     "thumbnail": "assets/icons/play.png",
-    "videoUrl": "https://youtu.be/inQrcFytHJ0"
+    "videoUrl": "https://ianjoshuabacud.publit.io/file/color.mp4"
   },
   {
-    "title": "Conversational SignLanguge",
+    "title": "Common Greetings",
+    "time": "171 seconds",
+    "thumbnail": "assets/icons/play.png",
+    "videoUrl": "https://ianjoshuabacud.publit.io/file/CommonGreetings.mp4"
+  },
+  
+  {
+    "title": "Conversational",
     "time": "120 seconds",
     "thumbnail": "assets/icons/play.png",
-    "videoUrl": "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"
+    "videoUrl": "https://ianjoshuabacud.publit.io/file/numbers.mp4"
   }
-
+ 
 ]

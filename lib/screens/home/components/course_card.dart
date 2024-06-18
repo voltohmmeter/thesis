@@ -19,8 +19,8 @@ class CourseCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        height: 280,
-        width: 260,
+        height: 208,
+        width: 220,
         decoration: BoxDecoration(
           color: course.bgColor,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -54,11 +54,6 @@ class CourseCard extends StatelessWidget {
                       3,
                       (index) => Transform.translate(
                         offset: Offset((-10 * index).toDouble(), 0),
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundImage: AssetImage(
-                              "assets/avaters/Avatar ${index + 1}.jpg"),
-                        ),
                       ),
                     ),
                   )
