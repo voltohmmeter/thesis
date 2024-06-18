@@ -77,7 +77,7 @@ class _SideMenuState extends State<SideMenu> {
                     color: Color.fromARGB(255, 0, 0, 0),
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: AssetImage('assets/Backgrounds/bg.jpg'),
+                      image: AssetImage('assets/Backgrounds/bggs.jpg'),
                     ),
                   ),
                 ),

@@ -184,13 +184,13 @@ class _SpeechCatchState extends State<SpeechCatch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 75),
-            if (_imageUrl.isEmpty)
-              Expanded(
-                child: Container(
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 75),
+              if (_imageUrl.isEmpty)
+                Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -232,22 +232,20 @@ class _SpeechCatchState extends State<SpeechCatch> {
                     ],
                   ),
                 ),
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  _speechToText.isListening
+                      ? "Listening..."
+                      : _speechEnabled
+                          ? "Tap the microphone or write the word to translate"
+                          : "Speech not available",
+                  style: const TextStyle(fontSize: 20.0),
+                ),
               ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                _speechToText.isListening
-                    ? "Listening..."
-                    : _speechEnabled
-                        ? "Tap the microphone or write the word to translate"
-                        : "Speech not available",
-                style: const TextStyle(fontSize: 20.0),
-              ),
-            ),
-            if (_imageUrl.isNotEmpty)
-              Expanded(
-                child: Column(
+              if (_imageUrl.isNotEmpty)
+                Column(
                   children: [
                     Stack(
                       alignment: Alignment.center,
@@ -288,9 +286,7 @@ class _SpeechCatchState extends State<SpeechCatch> {
                     ),
                   ],
                 ),
-              ),
-            Expanded(
-              child: Container(
+              Container(
                 padding: const EdgeInsets.all(16),
                 child: Text(
                   _wordsSpoken,
@@ -300,14 +296,14 @@ class _SpeechCatchState extends State<SpeechCatch> {
                   ),
                 ),
               ),
-            ),
-            if (_speechToText.isNotListening && _confidenceLevel > 0)
-              const Padding(
-                padding: EdgeInsets.only(
-                  bottom: 75,
+              if (_speechToText.isNotListening && _confidenceLevel > 0)
+                const Padding(
+                  padding: EdgeInsets.only(
+                    bottom: 75,
+                  ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: Column(
@@ -376,7 +372,7 @@ class _SpeechCatchState extends State<SpeechCatch> {
           TargetContent(
             align: ContentAlign.bottom,
             builder: (context, controller) => Text(
-              'This Cards Contains Sign Language Tutorials \n Click this to view the video tutorials',
+              'This Cards Contains Sign Language Tutorials \nClick this to view the video tutorials',
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
@@ -394,7 +390,7 @@ class _SpeechCatchState extends State<SpeechCatch> {
           TargetContent(
             align: ContentAlign.top,
             builder: (context, controller) => Text(
-              'Pressed this button to enable the speech input \n Note: this can only accepts inputs if the internet connection is on',
+              'Pressed this button to enable the speech input \nNote: this can only accepts inputs if the internet connection is on',
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
@@ -413,7 +409,7 @@ class _SpeechCatchState extends State<SpeechCatch> {
           TargetContent(
             align: ContentAlign.top,
             builder: (context, controller) => Text(
-              'Type the corresponding word to dsiplay the sign language\n Note: this can only accepts inputs if the internet connection is on ',
+              'Type the corresponding word to dsiplay the sign language\nNote: this can only accepts inputs if the internet connection is on ',
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
